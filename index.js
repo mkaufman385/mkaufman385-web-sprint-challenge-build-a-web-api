@@ -3,10 +3,16 @@ const express = require("express");
 
 const server = express();
 
+const PORT = process.env.PORT || 9000;
+
 server.use(express.json());
 
 server.get("api/projects", (req, res) => {
   res.json({ message: "API is working " });
+});
+
+server.use("*", (req, res) => {
+  res.send(`<h1>Project working!!</h1>`);
 });
 
 server.use((err, req, res, next) => {
@@ -16,4 +22,6 @@ server.use((err, req, res, next) => {
   });
 });
 
-console.log(process.env.PORT, process.env.NODE_ENV);
+server.listen(PORT, () => {
+  console.log(`listening on ${PORT}`);
+});

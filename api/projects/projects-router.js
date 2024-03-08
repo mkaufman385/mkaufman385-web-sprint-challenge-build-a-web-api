@@ -1,5 +1,6 @@
 const express = require("express");
 const Project = require("./projects-model");
+const { validateProject } = require("./projects-middleware");
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -38,7 +39,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", (req, res) => {
+router.post("/", validateProject, (req, res) => {
   const { name, description } = req.body;
   // create a middleware validateProject and then remove the if statement, and should be good
 

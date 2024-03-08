@@ -39,13 +39,48 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  if (!req.body) {
+  const { name, description } = req.body;
+
+  if (!name || !description) {
     res.status(400).json({
-      message: "Please be sure to provide all body info",
+      message:
+        "Please be sure to provide both 'name' and 'description' in the request body.",
     });
   } else {
-    console.log("success");
+    Project.insert({ name, description })
+      .then((newProject) => {
+        console.log("New Project:", newProject);
+        res.status(201).json(newProject); // Respond with the newly created project
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message:
+            "There was an error while saving the project to the database",
+          err: err.message,
+          stack: err.stack,
+        });
+      });
   }
+
+  // const { name, description } = req.body;
+  // if (!name || !description) {
+  //   res.status(400).json({
+  //     message: "Please be sure to provide both body and description",
+  //   });
+  // } else {
+  //   Project.insert({ name, description })
+  //     .then(({ id }) => {
+  //       console.log(id);
+  //       res.status(201).json({ id });
+  //     })
+  //     .catch((err) => {
+  //       res.status(500).json({
+  //         message: "There was an error while saving the post to the database",
+  //         err: err.message,
+  //         stack: err.stack,
+  //       });
+  //     });
+  // }
 });
 
 // router.put("/:id", (req, res) => {});

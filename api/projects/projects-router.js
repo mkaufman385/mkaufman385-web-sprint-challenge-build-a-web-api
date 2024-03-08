@@ -39,46 +39,37 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", validateProject, (req, res) => {
-  const { name, description } = req.body;
-  // create a middleware validateProject and then remove the if statement, and should be good
-
-  if (!name || !description) {
-    res.status(400).json({
-      message:
-        "Please provide both 'name' and 'description' in the request body.",
+router.post("/", validateProject, async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    const newProject = await Project.insert({ name, description });
+    res.status(201).json(newProject);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({
+      message: "There was an error while saving the project to the database",
+      err: err.message,
+      stack: err.stack,
     });
-  } else {
-    Project.insert({ name, description })
-
-      .then((newProject) => {
-        res.status(201).json(newProject); // Respond with the newly created project
-      })
-      .catch((err) => {
-        console.error("Error:", err);
-        res.status(500).json({
-          message:
-            "There was an error while saving the project to the database",
-          err: err.message,
-          stack: err.stack,
-        });
-      });
   }
-
   // const { name, description } = req.body;
+  // // create a middleware validateProject and then remove the if statement, and should be good
+
   // if (!name || !description) {
   //   res.status(400).json({
-  //     message: "Please be sure to provide both body and description",
+  //     message:
+  //       "Please provide both 'name' and 'description' in the request body.",
   //   });
   // } else {
   //   Project.insert({ name, description })
-  //     .then(({ id }) => {
-  //       console.log(id);
-  //       res.status(201).json({ id });
+  //     .then((newProject) => {
+  //       res.status(201).json(newProject); // Respond with the newly created project
   //     })
   //     .catch((err) => {
+  //       console.error("Error:", err);
   //       res.status(500).json({
-  //         message: "There was an error while saving the post to the database",
+  //         message:
+  //           "There was an error while saving the project to the database",
   //         err: err.message,
   //         stack: err.stack,
   //       });

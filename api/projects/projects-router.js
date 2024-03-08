@@ -16,14 +16,34 @@ router.get("/", (req, res) => {
     });
 });
 
-// router.get("/:id", (req, res) > {});
+router.get("/:id", async (req, res) => {
+  try {
+    const projectId = req.params.id;
+    const project = await Project.get(projectId);
+    console.log("Project -->", project);
 
-// router.post("/", (req, res) > {});
+    if (project) {
+      res.json(project);
+    } else {
+      res.status(404).json({
+        message: "No project exists with this id",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: "Internal Server Error",
+      err: err.message,
+      stack: err.stack,
+    });
+  }
+});
 
-// router.put("/:id", (req, res) > {});
+// router.post("/", (req, res) => {});
 
-// router.delete("/:id", (req, res) > {});
+// router.put("/:id", (req, res) => {});
 
-// router.get("/:id/actions", (req, res) > {});
+// router.delete("/:id", (req, res) => {});
+
+// router.get("/:id/actions", (req, res) => {});
 
 module.exports = router;

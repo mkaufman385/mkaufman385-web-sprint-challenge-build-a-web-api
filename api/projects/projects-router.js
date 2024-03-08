@@ -40,6 +40,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", (req, res) => {
   const { name, description } = req.body;
+  // create a middleware validateProject and then remove the if statement, and should be good
 
   if (!name || !description) {
     res.status(400).json({

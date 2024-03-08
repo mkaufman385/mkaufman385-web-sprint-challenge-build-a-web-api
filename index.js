@@ -16,7 +16,7 @@ server.get("api/projects", (req, res) => {
 // });
 
 // ************Put back in "next" when starting to work on middleware*************
-server.use((err, req, res, next) => {
+server.use((err, req, res) => {
   res.status(500).json({
     message: err.message,
     stack: err.stack,

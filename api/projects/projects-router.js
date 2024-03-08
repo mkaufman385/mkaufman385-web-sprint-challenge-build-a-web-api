@@ -38,7 +38,15 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// router.post("/", (req, res) => {});
+router.post("/", (req, res) => {
+  if (!req.body) {
+    res.status(400).json({
+      message: "Please be sure to provide all body info",
+    });
+  } else {
+    console.log("success");
+  }
+});
 
 // router.put("/:id", (req, res) => {});
 

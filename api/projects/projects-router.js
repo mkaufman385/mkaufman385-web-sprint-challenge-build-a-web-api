@@ -20,7 +20,7 @@ router.get("/:id", async (req, res) => {
   try {
     const projectId = req.params.id;
     const project = await Project.get(projectId);
-    console.log("Project -->", project);
+    console.log("PROJECT -->", project);
 
     if (project) {
       res.json(project);

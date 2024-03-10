@@ -6,15 +6,31 @@ const router = express.Router();
 router.get("/", (req, res) => {
   Project.get()
     .then((allProjects) => {
-      res.json(allProjects);
+      if (allProjects.length === 0) {
+        res.json([]);
+      } else {
+        res.json(allProjects);
+      }
     })
     .catch((err) => {
       res.status(500).json({
-        message: "Empty Array",
+        message: "Internal Server Error",
         err: err.message,
         stack: err.stack,
       });
     });
+
+  // Project.get()
+  //   .then((allProjects) => {
+  //     res.json(allProjects);
+  //   })
+  //   .catch((err) => {
+  //     res.status(500).json({
+  //       message: "Empty Array",
+  //       err: err.message,
+  //       stack: err.stack,
+  //     });
+  //   });
 });
 
 router.get("/:id", async (req, res) => {
@@ -77,7 +93,26 @@ router.post("/", validateProject, async (req, res) => {
   // }
 });
 
-// router.put("/:id", (req, res) => {});
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const changes = req.body;
+
+    const updatedProject = await Project.update(id, changes);
+
+    if (updatedProject) {
+      res.json(updatedProject);
+    } else {
+      res.status(404).json({ message: "Project not found" });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: "Internal Server Error",
+      err: err.message,
+      stack: err.stack,
+    });
+  }
+});
 
 // router.delete("/:id", (req, res) => {});
 

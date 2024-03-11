@@ -4,9 +4,9 @@ function validateProject(req, res, next) {
   const { name, description } = req.body;
 
   if (!name || !description) {
-    return res.status(400).json({
+    res.status(400).json({
       message:
-        "Please provide both 'name' and 'description' in the request body.",
+        "From validateProject middleware: Please provide both 'name' and 'description' in the request body.",
     });
   } else {
     next();

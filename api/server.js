@@ -1,20 +1,17 @@
 const express = require("express");
 const server = express();
 const projectsRouter = require("./projects/projects-router");
-const {
-  validateProject,
-  validateId,
-} = require("./projects/projects-middleware");
+// const {
+//   validateProject,
+//   validateId,
+// } = require("./projects/projects-middleware");
 
 server.use(express.json());
-server.use(validateProject);
-server.use(validateId);
+
+// server.use(validateProject);
+// server.use(validateId);
 
 server.use("/api/projects", projectsRouter);
-
-// server.get("/", (req, res) => {
-//   res.json({ message: "API is working " });
-// });
 
 server.get("/", (req, res) => {
   res.send(`<h2>Lets do it !!!</h2>`);
@@ -24,11 +21,10 @@ server.use("*", (req, res) => {
   res.send(`<h1>Project working!!</h1>`);
 });
 
-// ************Put back in "next" when starting to work on middleware*************
-server.use((err, req, res) => {
+server.use((err, req, res, next) => {
   console.error("Error:", err);
-  res.status(500).json({
-    message: "Internal Server Error",
+  res.status(err.status || 500).json({
+    customMessage: "Internal Server Error",
     err: err.message,
     stack: err.stack,
   });

@@ -27,6 +27,8 @@ async function validateId(req, res, next) {
   } catch (err) {
     res.status(500).json({
       message: "Problem finding project",
+      err: err.message,
+      stack: err.stack,
     });
   }
 }

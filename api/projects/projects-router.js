@@ -1,6 +1,6 @@
 const express = require("express");
 const Project = require("./projects-model");
-const { validateProject } = require("./projects-middleware");
+const { validateProject, validateId } = require("./projects-middleware");
 const router = express.Router();
 
 // router.get("/", (req, res) => {
@@ -40,11 +40,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", (req, res) => {
   try {
     const projectId = req.params.id;
-    const project = await Project.get(projectId);
-    console.log("PROJECT -->", project);
+    const project = Project.get(projectId);
 
     if (project) {
       res.json(project);

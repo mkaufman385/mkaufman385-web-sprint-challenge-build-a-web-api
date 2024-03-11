@@ -40,7 +40,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", validateId, (req, res) => {
   try {
     const projectId = req.params.id;
     const project = Project.get(projectId);
@@ -85,11 +85,10 @@ router.post("/", validateProject, async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", validateId, async (req, res) => {
   try {
     const { id } = req.params;
     const changes = req.body;
-
     const updatedProject = await Project.update(id, changes);
 
     if (updatedProject) {
@@ -106,7 +105,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", validateId, async (req, res, next) => {
   try {
     const result = await Project.remove(req.params.id);
     res.json(result);

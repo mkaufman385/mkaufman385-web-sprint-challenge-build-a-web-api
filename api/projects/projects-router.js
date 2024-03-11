@@ -11,73 +11,49 @@ router.get("/", (req, res, next) => {
     .catch(next);
 });
 
-// router.get("/", async (req, res) => {
-//   try {
-//     const allProjects = await Project.get();
+router.get("/:id", validateId, (req, res) => {
+  res.json(req.project);
+});
 
-//     if (allProjects.length === 0) {
-//       res.json([]);
-//     } else {
-//       res.json(allProjects);
-//     }
-//   } catch (err) {
-//     console.error("Error retrieving projects:", err);
-//     res.status(500).json({
-//       message: "Internal Server Error",
-//       err: err.message,
-//       stack: err.stack,
+router.post("/", validateProject, (req, res, next) => {
+  const { name, description } = req.body;
+  Project.insert({ name, description })
+    .then((newProject) => {
+      res.status(201).json(newProject);
+      // console.log(newProject);
+    })
+    .catch(next);
+});
+
+// try {
+//   const { name, description } = req.body;
+
+//   if (!name || !description) {
+//     return res.status(400).json({
+//       message:
+//         "From Post: Please provide both 'name' and 'description' in the request body.",
 //     });
 //   }
-// });
 
-router.get("/:id", validateId, (req, res) => {
-  // const project = Project.get(projectId);
-  res.json(req.project);
-  // try {
-  //   const projectId = req.params.id;
-  //   const project = Project.get(projectId);
+//   const newProject = await Project.insert({ name, description });
 
-  //   if (project) {
-  //     res.json(req.project);
-  //   } else {
-  //     res.status(404).json({
-  //       message: "No project exists with this id",
-  //     });
-  //   }
-  // } catch (err) {
-  //   res.status(500).json({
-  //     message: "Internal Server Error",
-  //     err: err.message,
-  //     stack: err.stack,
-  //   });
-  // }
-});
+//   res.status(201).json(newProject);
+// } catch (err) {
+//   console.error("Error:", err);
+//   res.status(500).json({
+//     message: "There was an error while saving the project to the database",
+//     err: err.message,
+//     stack: err.stack,
+//   });
+// }
 
-router.post("/", validateProject, async (req, res) => {
-  try {
-    const { name, description } = req.body;
+router.put("/:id", validateProject, validateId, async (req, res, next) => {
+  // Project.update(req.params.id, { name: req.name })
+  //   .then((updatedProject) => {
+  //     res.json(updatedProject);
+  //   })
+  //   .catch(next);
 
-    if (!name || !description) {
-      return res.status(400).json({
-        message:
-          "From Post: Please provide both 'name' and 'description' in the request body.",
-      });
-    }
-
-    const newProject = await Project.insert({ name, description });
-
-    res.status(201).json(newProject);
-  } catch (err) {
-    console.error("Error:", err);
-    res.status(500).json({
-      message: "There was an error while saving the project to the database",
-      err: err.message,
-      stack: err.stack,
-    });
-  }
-});
-
-router.put("/:id", validateProject, validateId, async (req, res) => {
   try {
     const { id } = req.params;
     const changes = req.body;

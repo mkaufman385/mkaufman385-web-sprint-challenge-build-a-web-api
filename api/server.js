@@ -1,10 +1,14 @@
 const express = require("express");
 const server = express();
 const projectsRouter = require("./projects/projects-router");
-const { validateProject } = require("./projects/projects-middleware");
+const {
+  validateProject,
+  validateId,
+} = require("./projects/projects-middleware");
 
 server.use(express.json());
 server.use(validateProject);
+server.use(validateId);
 
 server.use("/api/projects", projectsRouter);
 

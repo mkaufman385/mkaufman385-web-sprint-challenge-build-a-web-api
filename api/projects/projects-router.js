@@ -114,6 +114,6 @@ router.delete("/:id", validateId, async (req, res, next) => {
   }
 });
 
-// router.get("/:id/actions", (req, res) => {});
+// router.get("/:id/actions", validateId, (req, res) => {});
 
 module.exports = router;

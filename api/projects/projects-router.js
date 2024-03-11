@@ -3,34 +3,41 @@ const Project = require("./projects-model");
 const { validateProject } = require("./projects-middleware");
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  Project.get()
-    .then((allProjects) => {
-      if (allProjects.length === 0) {
-        res.json([]);
-      } else {
-        res.json(allProjects);
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: "Internal Server Error",
-        err: err.message,
-        stack: err.stack,
-      });
-    });
+// router.get("/", (req, res) => {
+//   Project.get()
+//     .then((allProjects) => {
+//       if (allProjects.length === 0) {
+//         res.json([]);
+//       } else {
+//         res.json(allProjects);
+//       }
+//     })
+//     .catch((err) => {
+//       res.status(500).json({
+//         message: "Internal Server Error",
+//         err: err.message,
+//         stack: err.stack,
+//       });
+//     });
+// });
 
-  // Project.get()
-  //   .then((allProjects) => {
-  //     res.json(allProjects);
-  //   })
-  //   .catch((err) => {
-  //     res.status(500).json({
-  //       message: "Empty Array",
-  //       err: err.message,
-  //       stack: err.stack,
-  //     });
-  //   });
+router.get("/", async (req, res) => {
+  try {
+    const allProjects = await Project.get();
+
+    if (allProjects.length === 0) {
+      res.json([]);
+    } else {
+      res.json(allProjects);
+    }
+  } catch (err) {
+    console.error("Error retrieving projects:", err);
+    res.status(500).json({
+      message: "Internal Server Error",
+      err: err.message,
+      stack: err.stack,
+    });
+  }
 });
 
 router.get("/:id", async (req, res) => {
@@ -100,7 +107,14 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// router.delete("/:id", (req, res) => {});
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const result = await Project.remove(req.params.id);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+});
 
 // router.get("/:id/actions", (req, res) => {});
 

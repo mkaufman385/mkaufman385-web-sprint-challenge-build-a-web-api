@@ -1,15 +1,8 @@
 const express = require("express");
 const server = express();
 const projectsRouter = require("./projects/projects-router");
-// const {
-//   validateProject,
-//   validateId,
-// } = require("./projects/projects-middleware");
 
 server.use(express.json());
-
-// server.use(validateProject);
-// server.use(validateId);
 
 server.use("/api/projects", projectsRouter);
 
@@ -19,15 +12,6 @@ server.get("/", (req, res) => {
 
 server.use("*", (req, res) => {
   res.send(`<h1>Project working!!</h1>`);
-});
-
-server.use((err, req, res, next) => {
-  console.error("Error:", err);
-  res.status(err.status || 500).json({
-    customMessage: "Internal Server Error",
-    err: err.message,
-    stack: err.stack,
-  });
 });
 
 // Configure your server here

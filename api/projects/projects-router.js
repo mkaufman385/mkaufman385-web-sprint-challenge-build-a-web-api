@@ -48,15 +48,21 @@ router.post("/", validateProject, (req, res, next) => {
 // }
 
 router.put("/:id", validateProject, validateId, async (req, res, next) => {
-  // Project.update(req.params.id, { name: req.name })
-  //   .then((updatedProject) => {
-  //     res.json(updatedProject);
-  //   })
-  //   .catch(next);
-
   try {
     const { id } = req.params;
     const changes = req.body;
+
+    // Validate the request body
+    if (
+      !changes.name ||
+      !changes.description ||
+      changes.completed === undefined
+    ) {
+      const validationError = new Error("Invalid request body");
+      validationError.status = 400;
+      throw validationError;
+    }
+
     const updatedProject = await Project.update(id, changes);
 
     if (updatedProject) {
@@ -65,11 +71,7 @@ router.put("/:id", validateProject, validateId, async (req, res, next) => {
       res.status(404).json({ message: "Project not found" });
     }
   } catch (err) {
-    res.status(500).json({
-      message: "Internal Server Error",
-      err: err.message,
-      stack: err.stack,
-    });
+    next(err); // Pass the error to the next middleware or error handler
   }
 });
 
@@ -82,7 +84,15 @@ router.delete("/:id", validateId, async (req, res, next) => {
   }
 });
 
-// router.get("/:id/actions", validateId, (req, res) => {});
+router.get("/:id/actions", validateId, async (req, res, next) => {
+  try {
+    const result = await Project.getProjectActions(req.params.id);
+    res.json(result);
+    console.log(result);
+  } catch (err) {
+    next(err);
+  }
+});
 
 router.use((err, req, res, next) => {
   res.status(err.status || 500).json({

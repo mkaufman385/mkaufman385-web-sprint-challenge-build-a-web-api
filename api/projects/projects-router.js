@@ -20,7 +20,7 @@ router.post("/", validateProject, (req, res, next) => {
   Project.insert({ name, description })
     .then((newProject) => {
       res.status(201).json(newProject);
-      // console.log(newProject);
+      console.log(newProject);
     })
     .catch(next);
 });

@@ -1,8 +1,14 @@
 const Action = require("./actions-model");
 
 function validateAction(req, res, next) {
-  console.log("validateAction");
-  next();
+  const { project_id, description, notes } = req.body;
+  if (!project_id || !description || !notes) {
+    res.status(400).json({
+      message: "missing required project_id, description, or notes",
+    });
+  } else {
+    next();
+  }
 }
 
 async function validateActionId(req, res, next) {

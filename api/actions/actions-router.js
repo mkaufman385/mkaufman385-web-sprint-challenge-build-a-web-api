@@ -1,5 +1,5 @@
 const express = require("express");
-const { validateActionId } = require("./actions-middlware");
+const { validateActionId, validateAction } = require("./actions-middlware");
 const Action = require("./actions-model");
 
 const router = express.Router();
@@ -12,11 +12,11 @@ router.get("/:id", validateActionId, (req, res) => {
   console.log(req.action);
 });
 
-router.post("/", (req, res) => {
+router.post("/", validateAction, (req, res) => {
   //later
 });
 
-router.put("/:id", validateActionId, (req, res) => {
+router.put("/:id", validateActionId, validateAction, (req, res) => {
   console.log(req.action);
   //later
 });

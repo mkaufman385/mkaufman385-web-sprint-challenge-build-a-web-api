@@ -4,15 +4,27 @@ const Action = require("./actions-model");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {});
+router.get("/", (req, res) => {
+  // later
+});
 
-// router.get("/:id", validateActionId, (req, res) => {});
+router.get("/:id", validateActionId, (req, res) => {
+  console.log(req.action);
+});
 
-// router.post("/", (req, res) => {});
+router.post("/", (req, res) => {
+  //later
+});
 
-// router.put("/:id", validateActionId, (req, res) => {});
+router.put("/:id", validateActionId, (req, res) => {
+  console.log(req.action);
+  //later
+});
 
-// router.delete("/:id", validateActionId, (req, res) => {});
+router.delete("/:id", validateActionId, (req, res) => {
+  console.log(req.action);
+  //later
+});
 
 router.use((err, req, res, next) => {
   res.status(err.status || 500).json({

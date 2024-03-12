@@ -25,28 +25,6 @@ router.post("/", validateProject, (req, res, next) => {
     .catch(next);
 });
 
-// try {
-//   const { name, description } = req.body;
-
-//   if (!name || !description) {
-//     return res.status(400).json({
-//       message:
-//         "From Post: Please provide both 'name' and 'description' in the request body.",
-//     });
-//   }
-
-//   const newProject = await Project.insert({ name, description });
-
-//   res.status(201).json(newProject);
-// } catch (err) {
-//   console.error("Error:", err);
-//   res.status(500).json({
-//     message: "There was an error while saving the project to the database",
-//     err: err.message,
-//     stack: err.stack,
-//   });
-// }
-
 router.put("/:id", validateProject, validateId, async (req, res, next) => {
   try {
     const { id } = req.params;

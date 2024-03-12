@@ -16,8 +16,18 @@ router.get("/:id", validateActionId, (req, res) => {
   res.json(req.action);
 });
 
-router.post("/", validateAction, (req, res) => {
-  //later
+router.post("/", validateAction, (req, res, next) => {
+  const { project_id, description, notes } = req.body;
+  Action.insert({
+    project_id,
+    description,
+    notes,
+  })
+    .then((newAction) => {
+      res.status(201).json(newAction);
+      console.log(newAction);
+    })
+    .catch(next);
 });
 
 router.put("/:id", validateActionId, validateAction, (req, res) => {

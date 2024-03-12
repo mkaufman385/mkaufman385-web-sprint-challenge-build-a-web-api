@@ -13,7 +13,7 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/:id", validateActionId, (req, res) => {
-  console.log(req.action);
+  res.json(req.action);
 });
 
 router.post("/", validateAction, (req, res) => {

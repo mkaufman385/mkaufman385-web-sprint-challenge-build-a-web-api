@@ -54,9 +54,13 @@ router.put("/:id", validateActionId, validateAction, async (req, res, next) => {
   }
 });
 
-router.delete("/:id", validateActionId, (req, res) => {
-  console.log(req.action);
-  //later
+router.delete("/:id", validateActionId, async (req, res, next) => {
+  try {
+    const result = await Action.remove(req.params.id);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.use((err, req, res, next) => {

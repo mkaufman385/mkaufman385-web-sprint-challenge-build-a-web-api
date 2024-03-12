@@ -1,4 +1,5 @@
-// add middlewares here related to actions
+const Action = require("./actions-model");
+
 function validateAction(req, res, next) {
   console.log("validateAction");
   next();

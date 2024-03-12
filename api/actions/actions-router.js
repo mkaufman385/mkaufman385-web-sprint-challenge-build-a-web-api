@@ -4,8 +4,12 @@ const Action = require("./actions-model");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  // later
+router.get("/", (req, res, next) => {
+  Action.get()
+    .then((actions) => {
+      res.json(actions);
+    })
+    .catch(next);
 });
 
 router.get("/:id", validateActionId, (req, res) => {
@@ -28,7 +32,7 @@ router.delete("/:id", validateActionId, (req, res) => {
 
 router.use((err, req, res, next) => {
   res.status(err.status || 500).json({
-    customMessage: "Soemthing tragic inside posts router happened",
+    customMessage: "Soemthing tragic inside action router happened",
     err: err.message,
     stack: err.stack,
   });

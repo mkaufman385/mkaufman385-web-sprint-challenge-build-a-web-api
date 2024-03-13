@@ -35,22 +35,25 @@ router.put("/:id", validateActionId, validateAction, async (req, res, next) => {
     const { id } = req.params;
     const changes = req.body;
 
-    // Validate the request body
-    if (!changes.project_id || !changes.description || changes.notes) {
+    if (!changes.project_id || !changes.description || !changes.notes) {
       const validationError = new Error("Invalid request body");
       validationError.status = 400;
+      console.log(validationError);
       throw validationError;
     }
 
     const updatedAction = await Action.update(id, changes);
 
     if (updatedAction) {
+      console.log("Action updated successfully:", updatedAction);
       res.json(updatedAction);
     } else {
+      console.log("Action not found");
       res.status(404).json({ message: "Action not found" });
     }
   } catch (err) {
-    next(err); // Pass the error to the next middleware or error handler
+    console.error("Error updating action:", err);
+    next(err);
   }
 });
 
